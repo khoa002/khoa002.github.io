@@ -7,10 +7,46 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <script type="text/javascript">
       function formSubmission() {
+        // grab the DOM objects by IDs
         var input = document.getElementById("reverse-me-string");
+        var outputElem = document.getElementById("output");
+        // get the value of the input, and strip out leading and trailing spaces
         var value = input.value.trim();
-        console.log(value);
+        if (!value) { // if the input field is empty
+          input.value = '';
+          alert('Input field is empty');
+          return false;
+        }
+        // using regex to look for special characters
+        var match = value.match(/[^\w\s]/gi, '');
+        if (match) {
+          // if special characters are found
+          var chars = []; // used to store special characters found
+          for(var i in match) {
+            // insert
+            if (chars.indexOf(match[i]) == -1)
+              chars.push(match[i]);
+          }
+          alert('The following characters are not allowed: ' + chars.join(', '));
+          return false;
+        }
+        
+        // input is valid, reverse it
+        value = reverseString(value);
+        outputElem.innerHTML = value;
         return false;
+      }
+      function reverseString(string) {
+        // the logic here is:
+          // if the string is empty, just return empty
+          // if not, recurse the function from the 2nd char until the end of the string, while concatenating the first char to the end
+          // so 'khoa':
+            // reverseString('khoa') = (reversString;('hoa') + k)
+            // reversString('hoa') = ((reverseString('oa') + h) + k)
+            // reverseString('oa') = (((reverseString('a') + o) + h) + k)
+            // reverseString('a') = ((((reverseString('') + a) + o) + h) + k)
+            // reverseString('') = end of recursion = '' + a + o + h + k = aohk
+        return (string === '') ? '' : reverseString(string.substr(1)) + string.charAt(0);
       }
     </script>
   </head>
@@ -18,13 +54,18 @@
     <h3>Reverse String</h3>
     <ul>
       <li>Please enter a string in the text field, then click on 'Reverse' to view the string reversed in the output area below.</li>
-      <li>
-        <form id="reverse-me-form" onsubmit="event.preventDefault(); formSubmission();">
-          <input type="text" id="reverse-me-string" />
-          <button type="submit">Reverse</button>
-        </form>
-      </li>
+        <uL>
+          <li>The text field cannot be empty</li>
+          <li>Leading and trailing spaces will be stripped</li>
+          <li>Special characters are not allowed</li>
+          <li>Spaces are allowed</li>
+        </ul>
     </ul>
+    <form id="reverse-me-form" onsubmit="event.preventDefault(); formSubmission();" style="text-align: center;">
+      <input type="text" id="reverse-me-string" />
+      <button type="submit">Reverse</button>
+    </form>
     <h3>Output</h3>
+    <div id="output" style="text-align: center; font-size: 3em; font-weight: bold;"></div>
   </body>
 </html>
