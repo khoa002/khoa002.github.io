@@ -6,13 +6,24 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <script type="text/javascript">
-      
+      function formSubmission() {
+        var input = document.getElementById("reverse-me-string");
+        var value = input.value.trim();
+        console.log(value);
+        return false;
+      }
     </script>
   </head>
   <body>
     <h3>Reverse String</h3>
     <ul>
       <li>Please enter a string in the text field, then click on 'Reverse' to view the string reversed in the output area below.</li>
+      <li>
+        <form id="reverse-me-form" onsubmit="event.preventDefault(); formSubmission();">
+          <input type="text" id="reverse-me-string" />
+          <button type="submit">Reverse</button>
+        </form>
+      </li>
     </ul>
     <h3>Output</h3>
   </body>
