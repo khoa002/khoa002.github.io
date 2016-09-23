@@ -7,9 +7,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <script type="text/javascript">
       // loop from 0 to 100, inclusively
+      var results = [];
       for (var i = 0; i <= 100; i++) {
-        if(i % 2 != 0) console.log(i); // log the current value if the remainder if the current value / 2 is not 0 (odd)
+        if(i % 2 != 0) results.push(i); // log the current value if the remainder if the current value / 2 is not 0 (odd)
       }
+      console.log(results.join(', '));
     </script>
   </head>
   <body>
