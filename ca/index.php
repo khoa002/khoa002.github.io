@@ -68,10 +68,14 @@ class ProcessProductTable
     * Calculate the total profit based on buy and sell prices
     * @param array $array this function expects an associative array that must contain
     *   at least the following keys: cost, price, qty
-    * @throws InvalidArgumentException if the argument is not an array, or is missing
-    *   the following keys: cost, price, qty
+    *   !! if $array has the existing key 'profit', it will be replace !!
+    *   this parameter is passed by reference, the original array will be modified
+    * @throws InvalidArgumentException if the argument
+    *   is not an array
+    *   is missing the following keys: cost, price, qty
+    *   cost, price, or qty is not a valid number
     */
-    private function calcProfit($array) {
+    private function calcProfit(&$array) {
         if (!is_array($array)) {
             throw new InvalidArgumentException("Invalid argument, only array is accepted. Input was: " . gettype($array));
         }
@@ -79,6 +83,14 @@ class ProcessProductTable
         if (count(array_intersect_key(array_flip($requiredFields), $array)) !== count($requiredFields)) {
             throw new InvalidArgumentException("Invalid input array, the following keys are required: cost, price, qty");
         }
+
+        foreach ($requiredFields as $field) {
+            if (!is_numeric($array[$field])) {
+                throw new InvalidArgumentException("Value of '{$field}' is not a valid number");
+            }
+        }
+        
+        $array["profit"] = ($array["price"] * $array["qty"]) - ($array["cost"] * $array["qty"]);
     }
 
     /**
