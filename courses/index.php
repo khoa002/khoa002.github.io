@@ -1,24 +1,18 @@
 <?php
-$conn_parsed = parse_url($_ENV["DATABASE_URL"]);
+if (strpos($_SERVER["HTTP_HOST"], "localhost") !== FALSE) {
+    $dbc_parts = [
+        "scheme" => "mysql",
+        "host" => "localhost",
+        "dbname" => "khoa002_test_db",
+        "user" => "root",
+        "pass" => "",
+        "port" => "3306"
+    ];
+} else {
+    $dbc_parts = parse_url($_ENV["JAWSDB_URL"]);
+    $dbc_parts["dbname"] = substr($dbc_parts["path"], 1);
+}
 
-$dsn = "pgsql:"
-     . "host={$conn_parsed["host"]};"
-     . "dbname=" . substr($conn_parsed["path"], 1) . ";"
-     . "user={$conn_parsed["user"]};"
-     . "port={$conn_parsed["port"]};"
-     . "password={$conn_parsed["pass"]};"
-     . "sslmode=require";
-// die(var_dump($dsn));
-$db = new PDO($dsn);
-die(var_dump($db));
-// $pg_conn = pg_connect(pg_connection_string_from_database_url());
-// $result = pg_query($pg_conn, "SELECT relname FROM pg_stat_user_tables WHERE schemaname='public'");
-// print "<pre>\n";
-// if (!pg_num_rows($result)) {
-//     print("Your connection is working, but your database is empty.\nFret not. This is expected for new apps.\n");
-// } else {
-//     print "Tables in your database:\n";
-//     while ($row = pg_fetch_row($result)) { print("- $row[0]\n"); }
-// }
-// print "\n";
+$dbh = new PDO("mysql:host={$dbc_parts["host"]};port={$dbc_parts["port"]};dbname={$dbc_parts["dbname"]}", $dbc_parts["user"], $dbc_parts["pass"]);
+die(var_dump($dbh));
 ?>
